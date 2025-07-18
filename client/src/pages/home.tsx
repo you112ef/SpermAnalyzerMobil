@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
 import { DnaOff, Download, Home as HomeIcon, BarChart3, FileText, Settings, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -30,6 +31,7 @@ export default function Home() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [location, setLocation] = useLocation();
 
   // Load TensorFlow model on component mount
   useEffect(() => {
@@ -442,9 +444,30 @@ export default function Home() {
             
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              <a href="#" className="text-blue-600 font-medium">Analysis</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600">Reports</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600">Settings</a>
+              <button 
+                onClick={() => setLocation('/')}
+                className={`font-medium ${location === '/' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
+              >
+                Analysis
+              </button>
+              <button 
+                onClick={() => setLocation('/reports')}
+                className={`font-medium ${location === '/reports' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
+              >
+                Reports
+              </button>
+              <button 
+                onClick={() => setLocation('/results')}
+                className={`font-medium ${location === '/results' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
+              >
+                Results
+              </button>
+              <button 
+                onClick={() => setLocation('/settings')}
+                className={`font-medium ${location === '/settings' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
+              >
+                Settings
+              </button>
               <Button size="sm">
                 <Download className="h-4 w-4 mr-2" />
                 Export
@@ -506,22 +529,50 @@ export default function Home() {
       {/* Bottom Navigation - Mobile Only */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50">
         <div className="grid grid-cols-4 h-16">
-          <button className="flex flex-col items-center justify-center space-y-1 text-blue-600 bg-blue-50">
+          <button 
+            onClick={() => setLocation('/')}
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              location === '/' 
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+            }`}
+          >
             <HomeIcon className="h-5 w-5" />
             <span className="text-xs font-medium">Analysis</span>
           </button>
           
-          <button className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => setLocation('/reports')}
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              location === '/reports' 
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+            }`}
+          >
             <BarChart3 className="h-5 w-5" />
             <span className="text-xs">Reports</span>
           </button>
           
-          <button className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => setLocation('/results')}
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              location === '/results' 
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+            }`}
+          >
             <FileText className="h-5 w-5" />
             <span className="text-xs">Results</span>
           </button>
           
-          <button className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => setLocation('/settings')}
+            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+              location === '/settings' 
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+            }`}
+          >
             <Settings className="h-5 w-5" />
             <span className="text-xs">Settings</span>
           </button>
