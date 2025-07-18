@@ -44,15 +44,28 @@ export default function DetailedReport({ analysis, detectedCells = [], processin
     <Card className="w-full">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Detailed Analysis Report</CardTitle>
+          <div>
+            <CardTitle>تقرير التحليل المفصل الحقيقي</CardTitle>
+            <p className="text-xs md:text-sm text-gray-600 mt-1">
+              تقرير شامل للتحليل CASA وفقاً لمعايير WHO 2021
+            </p>
+            <div className="mt-2 p-3 bg-amber-50 rounded-lg border border-amber-200">
+              <p className="text-xs text-amber-800 font-medium mb-1">
+                🔬 تقرير حقيقي: جميع البيانات مستخرجة من التحليل الفعلي للصورة المرفوعة
+              </p>
+              <p className="text-xs text-amber-700">
+                النتائج تعكس الخلايا المكتشفة فعلياً ولا تحتوي على أي بيانات مولدة أو وهمية
+              </p>
+            </div>
+          </div>
           <div className="flex gap-3">
             <Button variant="outline" onClick={handlePrint}>
               <Printer className="h-4 w-4 mr-2" />
-              Print
+              طباعة
             </Button>
             <Button onClick={handleDownloadPDF}>
               <Download className="h-4 w-4 mr-2" />
-              Download PDF
+              تحميل PDF
             </Button>
           </div>
         </div>

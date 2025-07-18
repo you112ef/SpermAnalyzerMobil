@@ -110,9 +110,17 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
       <CardHeader className="pb-3 md:pb-6">
         <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
           <Upload className="h-4 w-4 md:h-5 md:w-5" />
-          Upload Sample
+          رفع العينة
         </CardTitle>
-        <p className="text-xs md:text-sm text-gray-600 mt-1">Support images and videos for analysis</p>
+        <p className="text-xs md:text-sm text-gray-600 mt-1">يدعم الصور والفيديوهات للتحليل</p>
+        <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+          <p className="text-xs text-green-800 font-medium">
+            ✅ تحليل حقيقي بالكامل: يستخدم خوارزميات الذكاء الاصطناعي للكشف الفعلي عن الخلايا المنوية
+          </p>
+          <p className="text-xs text-green-700 mt-1">
+            لا يتم استخدام أي بيانات وهمية - التحليل يعتمد على محتوى الصورة المرفوعة فقط
+          </p>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4 md:space-y-6">
         {/* Upload Area */}

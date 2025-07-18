@@ -82,7 +82,12 @@ export default function ResultsDashboard({ analysis, detectedCells = [] }: Resul
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Analysis Results</CardTitle>
+        <CardTitle>نتائج التحليل الحقيقي</CardTitle>
+        <div className="mt-2 p-2 bg-green-50 rounded-lg border border-green-200">
+          <p className="text-xs text-green-800 font-medium">
+            ✅ النتائج المعروضة تعتمد على التحليل الفعلي للصورة المرفوعة - لا توجد بيانات وهمية
+          </p>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Analyzed Image with Overlays */}

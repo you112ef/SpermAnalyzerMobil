@@ -428,44 +428,13 @@ export class TensorFlowSpermAnalyzer {
         console.warn('Advanced tracking failed, falling back to basic tracking');
       }
       
-      // Basic tracking (original implementation)
+      // Real-time static analysis - analyze each detected cell individually
       const trackedCells = detections.map((detection, index) => {
-        const track = [];
-        const baseX = detection.x;
-        const baseY = detection.y;
+        // Real analysis of cell characteristics from the actual image
         const motilityType = detection.class as 'progressive' | 'non-progressive' | 'immotile';
         
-        // Generate realistic track based on motility type
-        const numFrames = 15; // More frames for better tracking
-        for (let frame = 0; frame < numFrames; frame++) {
-          let x = baseX;
-          let y = baseY;
-          
-          if (motilityType === 'progressive') {
-            // Progressive: consistent forward movement with slight deviation
-            const progressDistance = frame * (1.5 + Math.random() * 1.5); // 1.5-3 pixels per frame
-            const angle = Math.random() * Math.PI * 2; // Random direction
-            x += Math.cos(angle) * progressDistance + (Math.random() - 0.5) * 5;
-            y += Math.sin(angle) * progressDistance + (Math.random() - 0.5) * 5;
-          } else if (motilityType === 'non-progressive') {
-            // Non-progressive: random circular movement
-            const radius = 8 + Math.random() * 7; // 8-15 pixel radius
-            const angle = (frame / numFrames) * Math.PI * 4 + Math.random() * Math.PI;
-            x += Math.cos(angle) * radius * (0.5 + Math.random() * 0.5);
-            y += Math.sin(angle) * radius * (0.5 + Math.random() * 0.5);
-          } else {
-            // Immotile: minimal movement (brownian motion only)
-            x += (Math.random() - 0.5) * 2;
-            y += (Math.random() - 0.5) * 2;
-          }
-          
-          track.push({
-            x: Math.max(0, Math.min(x, 800)), // Keep within bounds
-            y: Math.max(0, Math.min(y, 600)),
-            timestamp: frame * 66.67 // ~15 FPS (66.67ms intervals)
-          });
-        }
-        
+        // For static image analysis, we record the single detection point
+        // In real CASA systems, this would be supplemented with video analysis
         return {
           id: `cell_${index}`,
           x: detection.x,
@@ -473,7 +442,11 @@ export class TensorFlowSpermAnalyzer {
           width: detection.width,
           height: detection.height,
           motilityType,
-          track
+          track: [{
+            x: detection.x,
+            y: detection.y,
+            timestamp: Date.now()
+          }] // Single point for static analysis
         };
       });
       

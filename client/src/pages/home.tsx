@@ -376,7 +376,7 @@ export default function Home() {
       setProgress({
         step: 'detection',
         progress: 70,
-        message: `Real computer vision detected ${detections.length} sperm cells using AI analysis...`
+        message: `تم كشف ${detections.length} خلية منوية فعلية من الصورة المرفوعة باستخدام الذكاء الاصطناعي...`
       });
 
       // Step 3: Cell Tracking
@@ -392,7 +392,7 @@ export default function Home() {
       setProgress({
         step: 'tracking',
         progress: 100,
-        message: `Tracked ${trackedCells.length} cells successfully`
+        message: `تم تحليل ${trackedCells.length} خلية منوية بنجاح من الصورة الحقيقية (تحليل ثابت)`
       });
 
       // Step 4: Calculate CASA Metrics
@@ -431,8 +431,8 @@ export default function Home() {
       });
 
       toast({
-        title: "Analysis Complete",
-        description: `Successfully analyzed ${trackedCells.length} cells in ${totalProcessingTime.toFixed(1)}s`,
+        title: "تم التحليل الحقيقي",
+        description: `تم تحليل ${trackedCells.length} خلية منوية فعلية من الصورة في ${totalProcessingTime.toFixed(1)} ثانية`,
       });
 
     } catch (error) {

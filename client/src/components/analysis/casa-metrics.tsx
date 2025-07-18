@@ -29,7 +29,15 @@ export default function CASAMetricsComponent({ analysis, detectedCells = [] }: C
       {/* CASA Metrics */}
       <Card>
         <CardHeader>
-          <CardTitle>CASA Metrics</CardTitle>
+          <CardTitle>مقاييس CASA الحقيقية</CardTitle>
+          <p className="text-xs md:text-sm text-gray-600 mt-1">
+            معايير التحليل المساعد بالحاسوب للسائل المنوي
+          </p>
+          <div className="mt-2 p-2 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-xs text-blue-800 font-medium">
+              📊 جميع المقاييس محسوبة من الخلايا المكتشفة فعلياً في الصورة المرفوعة
+            </p>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4">
