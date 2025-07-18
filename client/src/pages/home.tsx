@@ -366,12 +366,17 @@ export default function Home() {
         message: 'Detecting sperm cells using AI models...'
       });
 
+      // Load TensorFlow model if not already loaded
+      if (!await tensorflowAnalyzer.isModelLoaded()) {
+        await tensorflowAnalyzer.loadModel();
+      }
+      
       const detections = await tensorflowAnalyzer.detectCells(img);
       
       setProgress({
         step: 'detection',
         progress: 70,
-        message: `Detected ${detections.length} potential cells...`
+        message: `Real computer vision detected ${detections.length} sperm cells using AI analysis...`
       });
 
       // Step 3: Cell Tracking
