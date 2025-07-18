@@ -1,0 +1,141 @@
+شكرًا للتوضيح 🙌
+
+بما أنك تريد تحديث جميع أقسام النماذج داخل تطبيق bolt.diy (وليس فقط النماذج نفسها)، ليتم تحويلها إلى Agents ذكيين — فهنا المقصود يشمل:
+
+النماذج
+
+الأدوات (Tools)
+
+السياقات (Contexts)
+
+الذاكرة (Memory)
+
+الـ Chains أو Pipelines
+
+التوجيهات (Prompting Strategies)
+
+التفاعلات مع الملفات والمخرجات
+
+
+إليك نسخة نهائية ومحترفة بصيغة Markdown موجّهة لمنصة Cursor، لتحديث المشروع بالكامل وفق المطلوب:
+
+
+---
+
+# 🔄 bolt.diy – Full AI System Refactor to Agent-Based Architecture
+
+## 🎯 Objective
+Refactor all AI-related **modules, models, tools, and logic layers** in the `bolt.diy` application to function under a unified, modular **Agent-based system** — **without modifying UI design or altering existing app workflows**.
+
+---
+
+## ✅ Task Breakdown
+
+### 1. 🧠 AI Agent Architecture
+- [ ] Convert **all AI models** into modular Agent components:
+  - GPT, Claude, LLaMA, Gemini, Mistral...
+- [ ] Abstract model behavior under a common `Agent` interface.
+- [ ] Create `agentRegistry` to dynamically load agents.
+
+---
+
+### 2. 🧩 Update ALL AI Sections to Agent-Compatible:
+#### a. Models
+- [ ] Refactor `model-core.ts`, `model-wrapper.ts` into agent-based calls.
+  
+#### b. Tools
+- [ ] Wrap tools (e.g., search, code exec, file I/O) as `agentTools`.
+- [ ] Inject tools dynamically into each agent.
+
+#### c. Memory
+- [ ] Refactor memory layers (short-term, long-term, vector stores) to agent-compatible storage handlers.
+- [ ] Ensure each agent can read/write context as needed.
+
+#### d. Context & Routing
+- [ ] Update context-handling (e.g., chat history, codebase) to work as agent inputs.
+- [ ] Support agent chaining and cooperative task solving.
+
+#### e. Prompting Strategy
+- [ ] Modularize prompt templates into agent-driven prompt builders.
+- [ ] Enable model-specific or task-specific prompting inside agents.
+
+#### f. Output Processing
+- [ ] Centralize output processing in agent interfaces:
+  - Markdown rendering
+  - JSON/API output
+  - Inline message formatting
+
+---
+
+### 3. 🖥️ Terminal Update
+- [ ] Add support for multi-agent execution via terminal.
+- [ ] Enable command-level AI assistance from agents (e.g., explain errors, generate bash commands).
+- [ ] Keep current UI untouched.
+
+---
+
+### 4. 💻 Code Editor Upgrade
+- [ ] Enhance language support and add AI-powered autocompletion from agents.
+- [ ] Inline agent assistance (suggest improvements, refactor code, explain functions).
+- [ ] Maintain layout and workflow.
+
+---
+
+## 🔒 Constraints
+- ❌ No design/UX modifications
+- ❌ No breaking changes to existing user workflows
+- ✅ Maintain backward compatibility with user settings
+
+---
+
+## 🔧 Suggested File Structure Changes (example)
+
+/agents/ core/ - agent.ts          # Base interface - router.ts         # Agent router and dispatcher - memory.ts         # Unified memory handler - tools.ts          # Tool binding layer models/ - gpt_agent.ts - gemini_agent.ts - mistral_agent.ts
+
+/tools/
+
+search.ts
+
+exec.ts
+
+file.ts
+
+
+/prompts/
+
+builder.ts
+
+templates/
+
+
+/editor/
+
+intellisense_agent.ts
+
+
+/terminal/
+
+agent_terminal.ts
+
+
+---
+
+## ✅ Validation Checklist
+- [ ] Each model works as a standalone agent
+- [ ] Tools are injectable and reusable
+- [ ] Terminal executes AI tasks via agent
+- [ ] Editor provides smart agent-based suggestions
+- [ ] No broken routes or regressions
+- [ ] Design & layout remain untouched
+
+---
+
+## 📌 Optional (Advanced)
+- Add fallback agent for disconnected/offline mode.
+- Enable agent orchestration via YAML or JSON task plans.
+
+
+---
+
+هل تود أضيف أيضًا ملف cursor.config.json لتتبع هذه المهام داخل منصة Cursor؟
+

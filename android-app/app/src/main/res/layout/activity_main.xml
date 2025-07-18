@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/background_primary"
+    tools:context=".MainActivity">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/card_background"
+        android:layout_marginBottom="24dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_sperm_analyzer"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sperm Analyzer AI"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:gravity="center"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="100% Offline AI Analysis"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <!-- Main Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_take_photo"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="📸 Take Photo"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_primary"
+            android:layout_marginBottom="16dp"
+            android:elevation="4dp"/>
+
+        <Button
+            android:id="@+id/btn_record_video"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="📹 Record Video"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_secondary"
+            android:layout_marginBottom="16dp"
+            android:elevation="4dp"/>
+
+        <Button
+            android:id="@+id/btn_view_results"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="📊 View Results"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:background="@drawable/button_outline"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btn_about"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="ℹ️ About"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:background="@drawable/button_outline"/>
+
+    </LinearLayout>
+
+    <!-- Features -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/card_background"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Features"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🧠 Real YOLOv8 + DeepSORT AI\n📊 CASA Metrics Calculation\n🌐 100% Offline Operation\n📱 Native Android Performance"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:lineSpacingExtra="4dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
