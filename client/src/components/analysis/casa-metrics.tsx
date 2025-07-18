@@ -1,14 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle } from 'lucide-react';
-import type { CASAMetrics, QualityMetrics } from '@/types/analysis';
+import type { AnalysisResult, DetectedCell } from '@/types/analysis';
 
 interface CASAMetricsProps {
-  casa: CASAMetrics;
-  quality: QualityMetrics;
+  analysis: AnalysisResult;
+  detectedCells?: DetectedCell[];
 }
 
-export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps) {
+export default function CASAMetricsComponent({ analysis, detectedCells = [] }: CASAMetricsProps) {
   const formatValue = (value: number | null, unit: string = '') => {
     if (value === null) return 'N/A';
     return `${value.toFixed(1)}${unit}`;
@@ -40,10 +40,10 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold text-gray-900">
-                  {formatValue(casa.concentration, 'M')}
+                  {formatValue(analysis.concentration, 'M')}
                 </p>
-                <p className={`text-xs ${getStatusColor(casa.concentration, 16)}`}>
-                  {getStatusText(casa.concentration, 16)}
+                <p className={`text-xs ${getStatusColor(analysis.concentration, 16)}`}>
+                  {getStatusText(analysis.concentration, 16)}
                 </p>
               </div>
             </div>
@@ -55,10 +55,10 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold text-gray-900">
-                  {formatValue(casa.progressiveMotility, '%')}
+                  {formatValue(analysis.progressiveMotility, '%')}
                 </p>
-                <p className={`text-xs ${getStatusColor(casa.progressiveMotility, 30)}`}>
-                  {getStatusText(casa.progressiveMotility, 30)}
+                <p className={`text-xs ${getStatusColor(analysis.progressiveMotility, 30)}`}>
+                  {getStatusText(analysis.progressiveMotility, 30)}
                 </p>
               </div>
             </div>
@@ -70,10 +70,10 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold text-gray-900">
-                  {formatValue(casa.vap)}
+                  {formatValue(analysis.vap)}
                 </p>
-                <p className={`text-xs ${getStatusColor(casa.vap, 50)}`}>
-                  {getStatusText(casa.vap, 50)}
+                <p className={`text-xs ${getStatusColor(analysis.vap, 50)}`}>
+                  {getStatusText(analysis.vap, 50)}
                 </p>
               </div>
             </div>
@@ -85,10 +85,10 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold text-gray-900">
-                  {formatValue(casa.vcl)}
+                  {formatValue(analysis.vcl)}
                 </p>
-                <p className={`text-xs ${getStatusColor(casa.vcl, 80)}`}>
-                  {getStatusText(casa.vcl, 80)}
+                <p className={`text-xs ${getStatusColor(analysis.vcl, 80)}`}>
+                  {getStatusText(analysis.vcl, 80)}
                 </p>
               </div>
             </div>
@@ -100,10 +100,10 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold text-gray-900">
-                  {formatValue(casa.vsl)}
+                  {formatValue(analysis.vsl)}
                 </p>
-                <p className={`text-xs ${getStatusColor(casa.vsl, 40)}`}>
-                  {getStatusText(casa.vsl, 40)}
+                <p className={`text-xs ${getStatusColor(analysis.vsl, 40)}`}>
+                  {getStatusText(analysis.vsl, 40)}
                 </p>
               </div>
             </div>
@@ -115,10 +115,10 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold text-gray-900">
-                  {formatValue(casa.alh)}
+                  {formatValue(analysis.alh)}
                 </p>
-                <p className={`text-xs ${getStatusColor(casa.alh, 2)}`}>
-                  {getStatusText(casa.alh, 2)}
+                <p className={`text-xs ${getStatusColor(analysis.alh, 2)}`}>
+                  {getStatusText(analysis.alh, 2)}
                 </p>
               </div>
             </div>
@@ -130,10 +130,10 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold text-gray-900">
-                  {formatValue(casa.bcf)}
+                  {formatValue(analysis.bcf)}
                 </p>
-                <p className={`text-xs ${getStatusColor(casa.bcf, 8)}`}>
-                  {getStatusText(casa.bcf, 8)}
+                <p className={`text-xs ${getStatusColor(analysis.bcf, 8)}`}>
+                  {getStatusText(analysis.bcf, 8)}
                 </p>
               </div>
             </div>
@@ -151,9 +151,9 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-900">Overall Score</span>
               <div className="flex items-center gap-3">
-                <Progress value={quality.overallScore || 0} className="w-16" />
+                <Progress value={analysis.overallScore || 0} className="w-16" />
                 <span className="text-sm font-semibold text-green-600">
-                  {formatValue(quality.overallScore, '%')}
+                  {formatValue(analysis.overallScore, '%')}
                 </span>
               </div>
             </div>
@@ -161,9 +161,9 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-900">Morphology</span>
               <div className="flex items-center gap-3">
-                <Progress value={quality.morphologyScore || 0} className="w-16" />
+                <Progress value={analysis.morphologyScore || 0} className="w-16" />
                 <span className="text-sm font-semibold text-green-600">
-                  {formatValue(quality.morphologyScore, '%')}
+                  {formatValue(analysis.morphologyScore, '%')}
                 </span>
               </div>
             </div>
@@ -171,9 +171,9 @@ export default function CASAMetricsComponent({ casa, quality }: CASAMetricsProps
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-900">Vitality</span>
               <div className="flex items-center gap-3">
-                <Progress value={quality.vitalityScore || 0} className="w-16" />
+                <Progress value={analysis.vitalityScore || 0} className="w-16" />
                 <span className="text-sm font-semibold text-green-600">
-                  {formatValue(quality.vitalityScore, '%')}
+                  {formatValue(analysis.vitalityScore, '%')}
                 </span>
               </div>
             </div>

@@ -6,11 +6,11 @@ import type { AnalysisResult, DetectedCell } from '@/types/analysis';
 Chart.register(...registerables);
 
 interface ResultsDashboardProps {
-  result: AnalysisResult;
+  analysis: AnalysisResult;
   detectedCells?: DetectedCell[];
 }
 
-export default function ResultsDashboard({ result, detectedCells = [] }: ResultsDashboardProps) {
+export default function ResultsDashboard({ analysis, detectedCells = [] }: ResultsDashboardProps) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
 
@@ -25,10 +25,10 @@ export default function ResultsDashboard({ result, detectedCells = [] }: Results
     const ctx = chartRef.current.getContext('2d');
     if (!ctx) return;
 
-    const progressiveCells = result.cellCounts.progressiveCells || 0;
-    const nonProgressiveCells = result.cellCounts.nonProgressiveCells || 0;
-    const immotileCells = result.cellCounts.immotileCells || 0;
-    const totalCells = result.cellCounts.totalCells || 1;
+    const progressiveCells = analysis.progressiveCells || 0;
+    const nonProgressiveCells = analysis.nonProgressiveCells || 0;
+    const immotileCells = analysis.immotileCells || 0;
+    const totalCells = analysis.totalCells || 1;
 
     // Calculate percentages
     const progressiveA = Math.round((progressiveCells * 0.6 / totalCells) * 100); // 60% of progressive
@@ -68,7 +68,7 @@ export default function ResultsDashboard({ result, detectedCells = [] }: Results
         chartInstance.current.destroy();
       }
     };
-  }, [result]);
+  }, [analysis]);
 
   const getMotilityColor = (motilityType: string) => {
     switch (motilityType) {
@@ -88,7 +88,7 @@ export default function ResultsDashboard({ result, detectedCells = [] }: Results
         {/* Analyzed Image with Overlays */}
         <div className="relative">
           <img
-            src={result.imageUrl}
+            src={analysis.imageUrl}
             alt="Analyzed microscopic sperm sample"
             className="w-full h-64 object-cover rounded-lg"
           />

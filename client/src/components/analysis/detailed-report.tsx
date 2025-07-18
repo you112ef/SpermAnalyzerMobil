@@ -1,13 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Printer } from 'lucide-react';
-import type { AnalysisResult } from '@/types/analysis';
+import type { AnalysisResult, DetectedCell } from '@/types/analysis';
 
 interface DetailedReportProps {
-  result: AnalysisResult;
+  analysis: AnalysisResult;
+  detectedCells?: DetectedCell[];
+  processingTime?: number;
 }
 
-export default function DetailedReport({ result }: DetailedReportProps) {
+export default function DetailedReport({ analysis, detectedCells = [], processingTime = 0 }: DetailedReportProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -63,27 +65,27 @@ export default function DetailedReport({ result }: DetailedReportProps) {
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Analysis Date:</span>
-                <span className="font-medium">{formatDate(result.createdAt)}</span>
+                <span className="font-medium">{formatDate(analysis.createdAt)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Analysis Time:</span>
-                <span className="font-medium">{formatTime(result.createdAt)}</span>
+                <span className="font-medium">{formatTime(analysis.createdAt)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Sample ID:</span>
-                <span className="font-medium">{result.sampleId}</span>
+                <span className="font-medium">{analysis.sampleId}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Chamber Type:</span>
-                <span className="font-medium">{result.analysisParameters.chamberType}</span>
+                <span className="font-medium">Makler Chamber</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Magnification:</span>
-                <span className="font-medium">{result.analysisParameters.magnification}x</span>
+                <span className="font-medium">400x</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Temperature:</span>
-                <span className="font-medium">{result.analysisParameters.temperature}°C</span>
+                <span className="font-medium">37°C</span>
               </div>
             </div>
           </div>
@@ -117,7 +119,7 @@ export default function DetailedReport({ result }: DetailedReportProps) {
         </div>
 
         {/* Statistical Summary */}
-        {result.statisticalData && (
+        {analysis.statisticalData && (
           <div>
             <h3 className="text-md font-medium text-gray-900 mb-4">Statistical Summary</h3>
             <div className="overflow-x-auto">
@@ -135,43 +137,43 @@ export default function DetailedReport({ result }: DetailedReportProps) {
                 <tbody className="text-xs">
                   <tr>
                     <td className="border border-gray-200 px-4 py-2 font-medium">VAP (μm/s)</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vap.mean)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vap.std)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vap.min)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vap.max)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vap.median)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vap.mean)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vap.std)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vap.min)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vap.max)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vap.median)}</td>
                   </tr>
                   <tr className="bg-gray-50">
                     <td className="border border-gray-200 px-4 py-2 font-medium">VCL (μm/s)</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vcl.mean)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vcl.std)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vcl.min)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vcl.max)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vcl.median)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vcl.mean)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vcl.std)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vcl.min)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vcl.max)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vcl.median)}</td>
                   </tr>
                   <tr>
                     <td className="border border-gray-200 px-4 py-2 font-medium">VSL (μm/s)</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vsl.mean)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vsl.std)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vsl.min)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vsl.max)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.vsl.median)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vsl.mean)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vsl.std)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vsl.min)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vsl.max)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.vsl.median)}</td>
                   </tr>
                   <tr className="bg-gray-50">
                     <td className="border border-gray-200 px-4 py-2 font-medium">ALH (μm)</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.alh.mean)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.alh.std)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.alh.min)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.alh.max)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.alh.median)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.alh.mean)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.alh.std)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.alh.min)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.alh.max)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.alh.median)}</td>
                   </tr>
                   <tr>
                     <td className="border border-gray-200 px-4 py-2 font-medium">BCF (Hz)</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.bcf.mean)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.bcf.std)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.bcf.min)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.bcf.max)}</td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(result.statisticalData.bcf.median)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.bcf.mean)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.bcf.std)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.bcf.min)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.bcf.max)}</td>
+                    <td className="border border-gray-200 px-4 py-2 text-center">{formatValue(analysis.statisticalData.bcf.median)}</td>
                   </tr>
                 </tbody>
               </table>
