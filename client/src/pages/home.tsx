@@ -115,9 +115,10 @@ export default function Home() {
       
     } catch (error) {
       console.error('Analysis error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
         title: "Analysis Error",
-        description: "Failed to analyze image. Please try again.",
+        description: `Failed to analyze image: ${errorMessage}`,
         variant: "destructive"
       });
     } finally {
@@ -143,9 +144,10 @@ export default function Home() {
       
     } catch (error) {
       console.error('Video analysis error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
-        title: "Video Analysis Error",
-        description: "Failed to analyze video. Please try again.",
+        title: "Video Analysis Error", 
+        description: `Failed to analyze video: ${errorMessage}`,
         variant: "destructive"
       });
     } finally {
@@ -207,7 +209,7 @@ export default function Home() {
         ...cellCounts,
         statisticalData,
         processingTime: totalProcessingTime,
-        completedAt: new Date().toISOString()
+        completedAt: new Date()
       };
 
       await updateAnalysisMutation.mutateAsync({ id: analysis.id, updates });
@@ -226,9 +228,19 @@ export default function Home() {
     } catch (error) {
       console.error('Video processing error:', error);
       
-      await updateAnalysisMutation.mutateAsync({ 
-        id: analysis.id, 
-        updates: { analysisStatus: 'failed' }
+      try {
+        await updateAnalysisMutation.mutateAsync({ 
+          id: analysis.id, 
+          updates: { analysisStatus: 'failed' }
+        });
+      } catch (updateError) {
+        console.error('Failed to update analysis status:', updateError);
+      }
+
+      setProgress({
+        step: 'error',
+        progress: 0,
+        message: `Video analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       });
 
       throw error;
@@ -389,7 +401,7 @@ export default function Home() {
       const totalProcessingTime = (endTime - startTime) / 1000;
       setProcessingTime(totalProcessingTime);
 
-      // Update analysis with results
+      // Update analysis with results  
       const updates = {
         analysisStatus: 'completed',
         ...casaMetrics,
@@ -397,7 +409,7 @@ export default function Home() {
         ...cellCounts,
         statisticalData,
         processingTime: totalProcessingTime,
-        completedAt: new Date().toISOString()
+        completedAt: new Date()
       };
 
       await updateAnalysisMutation.mutateAsync({ id: analysis.id, updates });
@@ -417,9 +429,19 @@ export default function Home() {
       console.error('Processing error:', error);
       
       // Update analysis status to failed
-      await updateAnalysisMutation.mutateAsync({ 
-        id: analysis.id, 
-        updates: { analysisStatus: 'failed' }
+      try {
+        await updateAnalysisMutation.mutateAsync({ 
+          id: analysis.id, 
+          updates: { analysisStatus: 'failed' }
+        });
+      } catch (updateError) {
+        console.error('Failed to update analysis status:', updateError);
+      }
+
+      setProgress({
+        step: 'error',
+        progress: 0,
+        message: `Analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       });
 
       throw error;
