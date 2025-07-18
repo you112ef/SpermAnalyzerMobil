@@ -34,6 +34,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new analysis
   app.post("/api/analyses", upload.single('image'), async (req, res) => {
     try {
+      console.log('Request received:', {
+        file: req.file ? { filename: req.file.filename, size: req.file.size, mimetype: req.file.mimetype } : null,
+        body: req.body,
+        headers: req.headers['content-type']
+      });
+      
       if (!req.file) {
         return res.status(400).json({ message: "No image file provided" });
       }
