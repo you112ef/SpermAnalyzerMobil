@@ -5,7 +5,7 @@ import { DnaOff, Download, Home as HomeIcon, BarChart3, FileText, Settings, Menu
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import UploadSection from '@/components/analysis/upload-section';
-import ProgressTracker from '@/components/analysis/progress-tracker';
+import { AnalysisProgress } from '@/components/AnalysisProgress';
 import ResultsDashboard from '@/components/analysis/results-dashboard';
 import CASAMetrics from '@/components/analysis/casa-metrics';
 import DetailedReport from '@/components/analysis/detailed-report';
@@ -14,15 +14,15 @@ import { casaCalculator } from '@/lib/casa-calculator';
 import { imageProcessor } from '@/lib/image-processor';
 import { videoProcessor } from '@/lib/video-processor';
 import { apiRequest } from '@/lib/queryClient';
-import type { AnalysisResult, AnalysisProgress, DetectedCell } from '@/types/analysis';
+import type { DetectedCell, AnalysisResult, ProgressInfo, VideoData } from '@/types/analysis';
 
 export default function Home() {
   const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [progress, setProgress] = useState<AnalysisProgress>({
+  const [progress, setProgress] = useState<ProgressInfo>({
     step: 'preprocessing',
     progress: 0,
-    message: 'Waiting for image upload...'
+    message: 'في انتظار رفع الصورة...'
   });
   const [detectedCells, setDetectedCells] = useState<DetectedCell[]>([]);
   const [processingTime, setProcessingTime] = useState(0);
@@ -514,11 +514,9 @@ export default function Home() {
             isAnalyzing={isAnalyzing}
           />
           
-          <ProgressTracker 
+          <AnalysisProgress 
             progress={progress}
-            detectedCells={detectedCells.length}
-            trackedCells={detectedCells.filter(c => c.track && c.track.length > 0).length}
-            processingTime={processingTime}
+            isAnalyzing={isAnalyzing}
             isVideoAnalysis={isVideoAnalysis}
           />
         </div>

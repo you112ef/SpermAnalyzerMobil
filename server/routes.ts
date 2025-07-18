@@ -121,6 +121,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const updates = req.body;
       
+      // Handle timestamp conversion for database compatibility
+      if (updates.completedAt) {
+        if (typeof updates.completedAt === 'string') {
+          updates.completedAt = new Date(updates.completedAt);
+        } else if (updates.completedAt instanceof Date) {
+          // Already a Date object, keep as-is
+        } else {
+          // Remove invalid timestamp
+          delete updates.completedAt;
+        }
+      }
+      
+      console.log('Updating analysis:', { id, updatesKeys: Object.keys(updates) });
       const analysis = await storage.updateAnalysis(id, updates);
       
       if (!analysis) {
@@ -130,7 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(analysis);
     } catch (error) {
       console.error("Error updating analysis:", error);
-      res.status(500).json({ message: "Failed to update analysis" });
+      res.status(500).json({ message: "Failed to update analysis", error: error.message });
     }
   });
 

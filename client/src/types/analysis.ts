@@ -1,3 +1,15 @@
+export interface DetectedCell {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  motilityType: 'progressive' | 'non-progressive' | 'immotile';
+  track?: Array<{ x: number; y: number; timestamp: number }>;
+  confidence?: number;
+  class?: string;
+}
+
 export interface CASAMetrics {
   concentration: number | null; // cells/mL
   progressiveMotility: number | null; // percentage
@@ -16,73 +28,49 @@ export interface QualityMetrics {
 }
 
 export interface CellCounts {
-  totalCells: number | null;
-  motileCells: number | null;
-  progressiveCells: number | null;
-  nonProgressiveCells: number | null;
-  immotileCells: number | null;
-}
-
-export interface AnalysisParameters {
-  minCellSize: number;
-  maxCellSize: number;
-  magnification: number;
-  temperature: number;
-  chamberType: string;
+  totalCells: number;
+  motileCells: number;
+  progressiveCells: number;
+  nonProgressiveCells: number;
+  immotileCells: number;
 }
 
 export interface StatisticalData {
-  vap: {
+  vap?: {
     mean: number;
     std: number;
     min: number;
     max: number;
     median: number;
   };
-  vcl: {
+  vcl?: {
     mean: number;
     std: number;
     min: number;
     max: number;
     median: number;
   };
-  vsl: {
+  vsl?: {
     mean: number;
     std: number;
     min: number;
     max: number;
     median: number;
   };
-  alh: {
+  alh?: {
     mean: number;
     std: number;
     min: number;
     max: number;
     median: number;
   };
-  bcf: {
+  bcf?: {
     mean: number;
     std: number;
     min: number;
     max: number;
     median: number;
   };
-}
-
-export interface DetectedCell {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  motilityType: 'progressive' | 'non-progressive' | 'immotile';
-  track?: Array<{ x: number; y: number; timestamp: number }>;
-}
-
-export interface AnalysisProgress {
-  step: 'preprocessing' | 'detection' | 'tracking' | 'metrics' | 'complete';
-  progress: number; // 0-100
-  message: string;
 }
 
 export interface AnalysisResult {
@@ -92,13 +80,53 @@ export interface AnalysisResult {
   filename: string;
   fileSize: number;
   analysisStatus: 'pending' | 'processing' | 'completed' | 'failed';
-  casa: CASAMetrics;
-  quality: QualityMetrics;
-  cellCounts: CellCounts;
-  analysisParameters: AnalysisParameters;
-  statisticalData: StatisticalData | null;
-  detectedCells?: DetectedCell[];
-  processingTime: number | null;
-  createdAt: string;
-  completedAt: string | null;
+  
+  // CASA Metrics
+  concentration?: number | null;
+  progressiveMotility?: number | null;
+  totalMotility?: number | null;
+  vap?: number | null;
+  vcl?: number | null;
+  vsl?: number | null;
+  alh?: number | null;
+  bcf?: number | null;
+  
+  // Quality metrics
+  morphologyScore?: number | null;
+  vitalityScore?: number | null;
+  overallScore?: number | null;
+  
+  // Cell counts
+  totalCells?: number | null;
+  motileCells?: number | null;
+  progressiveCells?: number | null;
+  nonProgressiveCells?: number | null;
+  immotileCells?: number | null;
+  
+  // Analysis parameters
+  analysisParameters?: any;
+  
+  // Statistical data
+  statisticalData?: StatisticalData | null;
+  
+  // Metadata
+  createdAt?: string | Date;
+  completedAt?: string | Date | null;
+  processingTime?: number | null;
+}
+
+export interface ProgressInfo {
+  step: 'preprocessing' | 'detection' | 'tracking' | 'metrics' | 'complete' | 'error';
+  progress: number; // 0-100
+  message: string;
+}
+
+export interface VideoData {
+  frames: HTMLCanvasElement[];
+  frameRate: number;
+  duration: number;
+  detectedCells: Array<{
+    frameIndex: number;
+    cells: DetectedCell[];
+  }>;
 }
