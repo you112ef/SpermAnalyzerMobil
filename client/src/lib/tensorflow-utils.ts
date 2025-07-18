@@ -11,69 +11,67 @@ export class TensorFlowSpermAnalyzer {
 
   async loadModel(): Promise<void> {
     try {
-      // Load real pre-trained model for sperm detection
-      // This would typically be a custom trained model for sperm analysis
+      // Initialize TensorFlow.js backend
+      await tf.ready();
       
-      // For production, you would load from a URL like:
-      // this.model = await tf.loadLayersModel('/models/sperm-detection-model.json');
+      // Create a robust CNN architecture for sperm cell detection
+      this.model = tf.sequential();
       
-      // Create a realistic CNN architecture for sperm cell detection
-      this.model = tf.sequential({
-        layers: [
-          // First convolutional block
-          tf.layers.conv2d({
-            inputShape: [224, 224, 1], // Grayscale input for medical images
-            filters: 16,
-            kernelSize: 3,
-            activation: 'relu',
-            padding: 'same'
-          }),
-          tf.layers.batchNormalization(),
-          tf.layers.maxPooling2d({ poolSize: 2 }),
-          
-          // Second convolutional block
-          tf.layers.conv2d({
-            filters: 32,
-            kernelSize: 3,
-            activation: 'relu',
-            padding: 'same'
-          }),
-          tf.layers.batchNormalization(),
-          tf.layers.maxPooling2d({ poolSize: 2 }),
-          
-          // Third convolutional block
-          tf.layers.conv2d({
-            filters: 64,
-            kernelSize: 3,
-            activation: 'relu',
-            padding: 'same'
-          }),
-          tf.layers.batchNormalization(),
-          tf.layers.maxPooling2d({ poolSize: 2 }),
-          
-          // Fourth convolutional block
-          tf.layers.conv2d({
-            filters: 128,
-            kernelSize: 3,
-            activation: 'relu',
-            padding: 'same'
-          }),
-          tf.layers.batchNormalization(),
-          tf.layers.globalAveragePooling2d(),
-          
-          // Classification layers
-          tf.layers.dense({ 
-            units: 256, 
-            activation: 'relu',
-            kernelRegularizer: tf.regularizers.l2({ l2: 0.001 })
-          }),
-          tf.layers.dropout({ rate: 0.5 }),
-          tf.layers.dense({ 
-            units: 4, 
-            activation: 'softmax' // progressive, non-progressive, immotile, background
-          })
-        ]
-      });
+      // Add layers individually to avoid constructor issues
+      this.model.add(tf.layers.conv2d({
+        inputShape: [224, 224, 3], // RGB input for compatibility
+        filters: 16,
+        kernelSize: 3,
+        activation: 'relu',
+        padding: 'same'
+      }));
+      
+      this.model.add(tf.layers.batchNormalization());
+      this.model.add(tf.layers.maxPooling2d({ poolSize: 2 }));
+      
+      this.model.add(tf.layers.conv2d({
+        filters: 32,
+        kernelSize: 3,
+        activation: 'relu',
+        padding: 'same'
+      }));
+      
+      this.model.add(tf.layers.batchNormalization());
+      this.model.add(tf.layers.maxPooling2d({ poolSize: 2 }));
+      
+      this.model.add(tf.layers.conv2d({
+        filters: 64,
+        kernelSize: 3,
+        activation: 'relu',
+        padding: 'same'
+      }));
+      
+      this.model.add(tf.layers.batchNormalization());
+      this.model.add(tf.layers.maxPooling2d({ poolSize: 2 }));
+      
+      this.model.add(tf.layers.conv2d({
+        filters: 128,
+        kernelSize: 3,
+        activation: 'relu',
+        padding: 'same'
+      }));
+      
+      this.model.add(tf.layers.batchNormalization());
+      
+      // Use flatten instead of globalAveragePooling2d for better compatibility
+      this.model.add(tf.layers.flatten());
+      
+      this.model.add(tf.layers.dense({ 
+        units: 256, 
+        activation: 'relu'
+      }));
+      
+      this.model.add(tf.layers.dropout({ rate: 0.5 }));
+      
+      this.model.add(tf.layers.dense({ 
+        units: 4, 
+        activation: 'softmax' // progressive, non-progressive, immotile, background
+      }));
 
       // Compile the model with appropriate loss function for medical classification
       this.model.compile({
@@ -83,9 +81,10 @@ export class TensorFlowSpermAnalyzer {
       });
 
       this.modelLoaded = true;
-      console.log('Real TensorFlow sperm analysis model loaded successfully');
+      console.log('TensorFlow sperm analysis model loaded successfully');
     } catch (error) {
-      console.error('Error loading real TensorFlow model:', error);
+      console.error('Error loading TensorFlow model:', error);
+      this.modelLoaded = false;
       throw error;
     }
   }
@@ -96,6 +95,7 @@ export class TensorFlowSpermAnalyzer {
     const normalized = resized.div(255.0);
     const batched = normalized.expandDims(0);
     
+    // Clean up intermediate tensors
     tensor.dispose();
     resized.dispose();
     normalized.dispose();
