@@ -64,19 +64,19 @@ export default function ProgressTracker({
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle>
+      <CardHeader className="pb-3 md:pb-6">
+        <CardTitle className="text-lg md:text-xl">
           {isVideoAnalysis ? 'Real-time Video Analysis' : 'Analysis Progress'}
         </CardTitle>
         {isVideoAnalysis && (
-          <p className="text-sm text-blue-600 font-medium">
+          <p className="text-xs md:text-sm text-blue-600 font-medium">
             🎥 Processing video frames for motility tracking
           </p>
         )}
       </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Progress Steps */}
-        <div className="space-y-4">
+      <CardContent className="space-y-4 md:space-y-6">
+        {/* Progress Steps - Mobile Responsive */}
+        <div className="space-y-3 md:space-y-4">
           {steps.map((step) => {
             const status = getStepStatus(step.key);
             const Icon = status === 'completed' ? Check : 
@@ -84,19 +84,19 @@ export default function ProgressTracker({
                         step.icon;
             
             return (
-              <div key={step.key} className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getStepColor(status)}`}>
-                  <Icon className={`h-4 w-4 text-white ${status === 'current' ? 'animate-spin' : ''}`} />
+              <div key={step.key} className="flex items-center gap-2 md:gap-3">
+                <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center ${getStepColor(status)}`}>
+                  <Icon className={`h-3 w-3 md:h-4 md:w-4 text-white ${status === 'current' ? 'animate-spin' : ''}`} />
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">{step.name}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs md:text-sm font-medium text-gray-900 truncate">{step.name}</p>
                   <p className="text-xs text-gray-500">
                     {status === 'completed' ? 'Completed' : 
                      status === 'current' ? `Processing... ${progress.progress}%` : 
                      'Waiting'}
                   </p>
                   {status === 'current' && (
-                    <Progress value={progress.progress} className="mt-1 h-2" />
+                    <Progress value={progress.progress} className="mt-1 h-1.5 md:h-2" />
                   )}
                 </div>
               </div>
@@ -104,18 +104,18 @@ export default function ProgressTracker({
           })}
         </div>
 
-        {/* Processing Info */}
-        <div className="p-4 bg-blue-50 rounded-lg">
+        {/* Processing Info - Mobile Responsive */}
+        <div className="p-3 md:p-4 bg-blue-50 rounded-lg">
           <div className="flex items-start gap-2">
-            <Info className="h-4 w-4 text-blue-600 mt-0.5" />
-            <div>
-              <p className="text-sm text-blue-800">
-                <strong>Processing Status:</strong> {progress.message}
+            <Info className="h-3 w-3 md:h-4 md:w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs md:text-sm text-blue-800">
+                <strong>Status:</strong> <span className="break-words">{progress.message}</span>
               </p>
-              <div className="mt-2 text-xs text-blue-700 space-y-1">
+              <div className="mt-1 md:mt-2 text-xs text-blue-700 space-y-0.5 md:space-y-1">
                 <p>• Detected: {detectedCells} cells</p>
                 <p>• Tracked: {trackedCells} cells</p>
-                <p>• Processing Time: {processingTime.toFixed(1)}s</p>
+                <p>• Time: {processingTime.toFixed(1)}s</p>
               </div>
             </div>
           </div>

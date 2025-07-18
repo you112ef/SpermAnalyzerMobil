@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile touch improvements */
+@layer base {
+  /* Better touch targets for mobile */
+  button, [role="button"] {
+    min-height: 44px;
+  }
+  
+  /* Prevent zoom on input focus on iOS */
+  input[type="text"], 
+  input[type="number"], 
+  input[type="email"], 
+  input[type="password"], 
+  textarea, 
+  select {
+    font-size: 16px;
+  }
+  
+  /* Better mobile scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent horizontal scroll */
+  html, body {
+    overflow-x: hidden;
+  }
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);

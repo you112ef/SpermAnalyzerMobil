@@ -107,16 +107,17 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Upload className="h-5 w-5" />
-          Upload Microscopic Image
+      <CardHeader className="pb-3 md:pb-6">
+        <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+          <Upload className="h-4 w-4 md:h-5 md:w-5" />
+          Upload Sample
         </CardTitle>
+        <p className="text-xs md:text-sm text-gray-600 mt-1">Support images and videos for analysis</p>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 md:space-y-6">
         {/* Upload Area */}
         <div
-          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+          className={`border-2 border-dashed rounded-lg p-4 md:p-8 text-center cursor-pointer transition-colors ${
             isDragOver 
               ? 'border-blue-500 bg-blue-50' 
               : 'border-gray-300 hover:border-blue-400'
@@ -126,9 +127,9 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
           onDragLeave={handleDragLeave}
           onClick={() => fileInputRef.current?.click()}
         >
-          <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <p className="text-gray-600 mb-2">Drop your microscopic image or video here or click to browse</p>
-          <p className="text-sm text-gray-500">Supports JPG, PNG, TIFF images and MP4, AVI, MOV, WEBM videos up to 50MB</p>
+          <Upload className="mx-auto h-8 w-8 md:h-12 md:w-12 text-gray-400 mb-2 md:mb-4" />
+          <p className="text-sm md:text-base text-gray-600 mb-1 md:mb-2">Drop your sample here or tap to browse</p>
+          <p className="text-xs md:text-sm text-gray-500">Images (JPG, PNG, TIFF) and Videos (MP4, AVI, MOV, WEBM) up to 50MB</p>
           <input
             ref={fileInputRef}
             type="file"
@@ -142,20 +143,20 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
           />
         </div>
 
-        {/* File Preview */}
+        {/* File Preview - Mobile Responsive */}
         {imagePreview && (
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-gray-700">
+          <div className="bg-gray-50 rounded-lg p-3 md:p-4">
+            <div className="flex items-center justify-between mb-2 md:mb-3">
+              <span className="text-xs md:text-sm font-medium text-gray-700">
                 Selected {isVideo ? 'Video' : 'Image'}
               </span>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={clearFile}
-                className="text-red-500 hover:text-red-600"
+                className="text-red-500 hover:text-red-600 h-6 w-6 md:h-8 md:w-8 p-0"
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3 md:h-4 md:w-4" />
               </Button>
             </div>
             
@@ -163,7 +164,7 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
               <video
                 src={imagePreview}
                 controls
-                className="w-full h-48 object-contain rounded-lg bg-black"
+                className="w-full h-32 md:h-48 object-contain rounded-lg bg-black"
                 muted
                 playsInline
               />
@@ -171,24 +172,24 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
               <img
                 src={imagePreview}
                 alt="Microscopic sperm analysis sample"
-                className="w-full h-48 object-cover rounded-lg"
+                className="w-full h-32 md:h-48 object-cover rounded-lg"
               />
             )}
             
-            <div className="mt-3 text-sm text-gray-600 space-y-1">
-              <p><strong>Filename:</strong> {selectedFile?.name}</p>
+            <div className="mt-2 md:mt-3 text-xs md:text-sm text-gray-600 space-y-0.5 md:space-y-1">
+              <p><strong>Filename:</strong> <span className="break-all">{selectedFile?.name}</span></p>
               <p><strong>Size:</strong> {selectedFile ? (selectedFile.size / 1024 / 1024).toFixed(1) : 0} MB</p>
               <p><strong>Type:</strong> {isVideo ? 'Video Analysis (Real-time Motility Tracking)' : 'Static Image Analysis'}</p>
             </div>
           </div>
         )}
 
-        {/* Analysis Parameters */}
-        <div className="space-y-4">
-          <Label className="text-sm font-medium text-gray-700">Analysis Parameters</Label>
-          <div className="grid grid-cols-2 gap-4">
+        {/* Analysis Parameters - Mobile Responsive */}
+        <div className="space-y-3 md:space-y-4">
+          <Label className="text-sm md:text-base font-medium text-gray-700">Analysis Parameters</Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             <div>
-              <Label htmlFor="minCellSize" className="text-xs text-gray-600">
+              <Label htmlFor="minCellSize" className="text-xs md:text-sm text-gray-600">
                 Minimum Cell Size (μm)
               </Label>
               <Input
@@ -196,11 +197,11 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
                 type="number"
                 value={parameters.minCellSize}
                 onChange={(e) => setParameters(prev => ({ ...prev, minCellSize: Number(e.target.value) }))}
-                className="mt-1"
+                className="mt-1 h-9 md:h-10"
               />
             </div>
             <div>
-              <Label htmlFor="maxCellSize" className="text-xs text-gray-600">
+              <Label htmlFor="maxCellSize" className="text-xs md:text-sm text-gray-600">
                 Maximum Cell Size (μm)
               </Label>
               <Input
@@ -208,7 +209,7 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
                 type="number"
                 value={parameters.maxCellSize}
                 onChange={(e) => setParameters(prev => ({ ...prev, maxCellSize: Number(e.target.value) }))}
-                className="mt-1"
+                className="mt-1 h-9 md:h-10"
               />
             </div>
           </div>
@@ -216,7 +217,7 @@ export default function UploadSection({ onFileUpload, onVideoUpload, isAnalyzing
           <Button
             onClick={handleStartAnalysis}
             disabled={!selectedFile || isAnalyzing}
-            className="w-full"
+            className="w-full h-10 md:h-11 text-sm md:text-base"
           >
             <Play className="h-4 w-4 mr-2" />
             {isAnalyzing ? 'Analyzing...' : 'Start Analysis'}

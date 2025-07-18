@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { DnaOff, Download } from 'lucide-react';
+import { DnaOff, Download, Home as HomeIcon, BarChart3, FileText, Settings, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import UploadSection from '@/components/analysis/upload-section';
@@ -425,33 +425,44 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+    <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
+      {/* Header - Mobile Optimized */}
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <DnaOff className="h-6 w-6 text-blue-600 mr-3" />
-              <h1 className="text-xl font-semibold text-gray-900">CASA Pro</h1>
-              <span className="ml-2 text-sm text-gray-500">Computer-Assisted Sperm Analysis with Real Video Tracking</span>
+          <div className="flex justify-between items-center h-14 md:h-16">
+            <div className="flex items-center min-w-0 flex-1">
+              <DnaOff className="h-5 w-5 md:h-6 md:w-6 text-blue-600 mr-2 md:mr-3 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg md:text-xl font-semibold text-gray-900 truncate">CASA Pro</h1>
+                <span className="hidden sm:block text-xs md:text-sm text-gray-500 truncate">
+                  Computer-Assisted Sperm Analysis with Real Video Tracking
+                </span>
+              </div>
             </div>
-            <nav className="flex items-center space-x-6">
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
               <a href="#" className="text-blue-600 font-medium">Analysis</a>
               <a href="#" className="text-gray-600 hover:text-blue-600">Reports</a>
               <a href="#" className="text-gray-600 hover:text-blue-600">Settings</a>
-              <Button>
+              <Button size="sm">
                 <Download className="h-4 w-4 mr-2" />
                 Export
               </Button>
             </nav>
+            
+            {/* Mobile Menu Button */}
+            <Button variant="ghost" size="sm" className="md:hidden">
+              <Menu className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Upload and Progress Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      {/* Main Content - Mobile Optimized */}
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 md:py-8">
+        {/* Upload and Progress Section - Mobile Responsive */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8">
           <UploadSection 
             onFileUpload={handleFileUpload}
             onVideoUpload={handleVideoUpload}
@@ -467,18 +478,18 @@ export default function Home() {
           />
         </div>
 
-        {/* Results Section */}
+        {/* Results Section - Mobile Responsive */}
         {currentAnalysis && currentAnalysis.analysisStatus === 'completed' && (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+              <div className="xl:col-span-2 order-2 xl:order-1">
                 <ResultsDashboard 
                   result={currentAnalysis}
                   detectedCells={detectedCells}
                 />
               </div>
               
-              <div>
+              <div className="order-1 xl:order-2">
                 <CASAMetrics 
                   casa={currentAnalysis.casa}
                   quality={currentAnalysis.quality}
@@ -491,6 +502,31 @@ export default function Home() {
           </>
         )}
       </main>
+
+      {/* Bottom Navigation - Mobile Only */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50">
+        <div className="grid grid-cols-4 h-16">
+          <button className="flex flex-col items-center justify-center space-y-1 text-blue-600 bg-blue-50">
+            <HomeIcon className="h-5 w-5" />
+            <span className="text-xs font-medium">Analysis</span>
+          </button>
+          
+          <button className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors">
+            <BarChart3 className="h-5 w-5" />
+            <span className="text-xs">Reports</span>
+          </button>
+          
+          <button className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors">
+            <FileText className="h-5 w-5" />
+            <span className="text-xs">Results</span>
+          </button>
+          
+          <button className="flex flex-col items-center justify-center space-y-1 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors">
+            <Settings className="h-5 w-5" />
+            <span className="text-xs">Settings</span>
+          </button>
+        </div>
+      </nav>
     </div>
   );
 }
