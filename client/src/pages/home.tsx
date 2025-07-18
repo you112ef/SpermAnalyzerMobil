@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import UploadSection from '@/components/analysis/upload-section';
 import { AnalysisProgress } from '@/components/AnalysisProgress';
+import { BatchProcessor } from '@/components/BatchProcessor';
+import { LISIntegration } from '@/components/LISIntegration';
 import ResultsDashboard from '@/components/analysis/results-dashboard';
 import CASAMetrics from '@/components/analysis/casa-metrics';
 import DetailedReport from '@/components/analysis/detailed-report';
@@ -28,6 +30,9 @@ export default function Home() {
   const [processingTime, setProcessingTime] = useState(0);
   const [videoFrames, setVideoFrames] = useState<HTMLCanvasElement[]>([]);
   const [isVideoAnalysis, setIsVideoAnalysis] = useState(false);
+  const [showBatchProcessor, setShowBatchProcessor] = useState(false);
+  const [showLISIntegration, setShowLISIntegration] = useState(false);
+  const [useAdvancedTracking, setUseAdvancedTracking] = useState(true);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -376,7 +381,7 @@ export default function Home() {
         message: 'Tracking cell movement patterns...'
       });
 
-      const trackedCells = await tensorflowAnalyzer.trackCells(detections);
+      const trackedCells = await tensorflowAnalyzer.trackCells(detections, useAdvancedTracking);
       setDetectedCells(trackedCells);
       
       setProgress({
@@ -467,32 +472,44 @@ export default function Home() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
               <button 
-                onClick={() => setLocation('/')}
-                className={`font-medium ${location === '/' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
+                onClick={() => { setLocation('/'); setShowBatchProcessor(false); setShowLISIntegration(false); }}
+                className={`font-medium ${location === '/' && !showBatchProcessor && !showLISIntegration ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
               >
-                Analysis
+                تحليل فردي
+              </button>
+              <button 
+                onClick={() => { setShowBatchProcessor(true); setShowLISIntegration(false); }}
+                className={`font-medium ${showBatchProcessor ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
+              >
+                معالجة مجمعة
+              </button>
+              <button 
+                onClick={() => { setShowLISIntegration(true); setShowBatchProcessor(false); }}
+                className={`font-medium ${showLISIntegration ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
+              >
+                تكامل LIS
               </button>
               <button 
                 onClick={() => setLocation('/reports')}
                 className={`font-medium ${location === '/reports' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
               >
-                Reports
+                تقارير
               </button>
               <button 
                 onClick={() => setLocation('/results')}
                 className={`font-medium ${location === '/results' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
               >
-                Results
+                نتائج
               </button>
               <button 
                 onClick={() => setLocation('/settings')}
                 className={`font-medium ${location === '/settings' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
               >
-                Settings
+                إعدادات
               </button>
               <Button size="sm">
                 <Download className="h-4 w-4 mr-2" />
-                Export
+                تصدير
               </Button>
             </nav>
             
@@ -506,42 +523,94 @@ export default function Home() {
 
       {/* Main Content - Mobile Optimized */}
       <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 md:py-8">
-        {/* Upload and Progress Section - Mobile Responsive */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8">
-          <UploadSection 
-            onFileUpload={handleFileUpload}
-            onVideoUpload={handleVideoUpload}
-            isAnalyzing={isAnalyzing}
+        {showBatchProcessor ? (
+          /* Batch Processing Section */
+          <BatchProcessor 
+            onJobComplete={(jobId) => {
+              console.log('Batch job completed:', jobId);
+              toast({
+                title: "تمت المعالجة المجمعة",
+                description: "تم الانتهاء من معالجة جميع الملفات بنجاح",
+              });
+            }}
           />
-          
-          <AnalysisProgress 
-            progress={progress}
-            isAnalyzing={isAnalyzing}
-            isVideoAnalysis={isVideoAnalysis}
+        ) : showLISIntegration ? (
+          /* LIS Integration Section */
+          <LISIntegration 
+            analysis={currentAnalysis || undefined}
+            onResultSent={(result) => {
+              console.log('LIS result sent:', result);
+              toast({
+                title: "تم إرسال النتائج",
+                description: "تم إرسال النتائج إلى نظام المختبر بنجاح",
+              });
+            }}
           />
-        </div>
+        ) : (
+          <>
+            {/* Advanced Tracking Toggle */}
+            <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-medium text-blue-900">التتبع المتقدم (DeepSORT)</h3>
+                  <p className="text-xs text-blue-700 mt-1">
+                    يحسن دقة تتبع الخلايا ويوفر تحليل حركة أكثر تفصيلاً
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={useAdvancedTracking}
+                    onChange={(e) => setUseAdvancedTracking(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+            </div>
+
+            {/* Upload and Progress Section - Mobile Responsive */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-6 md:mb-8">
+              <UploadSection 
+                onFileUpload={handleFileUpload}
+                onVideoUpload={handleVideoUpload}
+                isAnalyzing={isAnalyzing}
+              />
+              
+              <AnalysisProgress 
+                progress={progress}
+                isAnalyzing={isAnalyzing}
+                isVideoAnalysis={isVideoAnalysis}
+              />
+            </div>
+          </>
+        )}
 
         {/* Results Section - Mobile Responsive */}
-        {currentAnalysis && currentAnalysis.analysisStatus === 'completed' && (
+        {!showBatchProcessor && !showLISIntegration && currentAnalysis && currentAnalysis.analysisStatus === 'completed' && (
           <>
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
               <div className="xl:col-span-2 order-2 xl:order-1">
                 <ResultsDashboard 
-                  result={currentAnalysis}
+                  analysis={currentAnalysis}
                   detectedCells={detectedCells}
                 />
               </div>
               
               <div className="order-1 xl:order-2">
                 <CASAMetrics 
-                  casa={currentAnalysis.casa}
-                  quality={currentAnalysis.quality}
+                  analysis={currentAnalysis}
+                  detectedCells={detectedCells}
                 />
               </div>
             </div>
 
             {/* Detailed Report */}
-            <DetailedReport result={currentAnalysis} />
+            <DetailedReport 
+              analysis={currentAnalysis} 
+              detectedCells={detectedCells}
+              processingTime={processingTime}
+            />
           </>
         )}
       </main>

@@ -34,8 +34,10 @@ Preferred communication style: Simple, everyday language.
 
 ### AI/ML Analysis Engine
 - **TensorFlow.js**: Client-side machine learning for real-time sperm detection and classification
+- **Advanced Tracker**: DeepSORT-equivalent tracking algorithm with motion prediction and feature matching
 - **Image Processing**: Custom preprocessing pipeline for image enhancement and noise reduction
 - **CASA Calculator**: Specialized algorithms for computing motility metrics (VAP, VCL, VSL, ALH, BCF)
+- **Batch Processor**: Multi-file processing system with queue management and progress tracking
 
 ### Analysis Pipeline
 1. **Image Preprocessing**: Contrast enhancement, noise reduction, and intensity normalization
@@ -46,10 +48,13 @@ Preferred communication style: Simple, everyday language.
 
 ### Core Features
 - **File Upload**: Drag-and-drop interface supporting JPEG, PNG, and TIFF formats (10MB limit)
+- **Batch Processing**: Multi-file analysis with concurrent processing and queue management
+- **Advanced Tracking**: DeepSORT-style cell tracking with motion prediction and feature similarity
 - **Real-time Progress**: Step-by-step analysis tracking with live updates
 - **Results Dashboard**: Interactive charts showing motility distribution and key metrics
 - **Detailed Reports**: Comprehensive PDF-ready reports with all CASA parameters
 - **Data Persistence**: Full analysis history with searchable records
+- **Arabic Interface**: Complete Arabic language support for MENA region users
 
 ## Data Flow
 

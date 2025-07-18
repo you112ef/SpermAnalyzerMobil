@@ -1,4 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
+import { advancedTracker } from './advanced-tracker';
 
 export class TensorFlowSpermAnalyzer {
   private model: tf.LayersModel | null = null;
@@ -108,7 +109,7 @@ export class TensorFlowSpermAnalyzer {
     height: number;
     confidence: number;
     class: string;
-  }>): Promise<Array<{
+  }>, useAdvancedTracking: boolean = false): Promise<Array<{
     id: string;
     x: number;
     y: number;
@@ -118,8 +119,30 @@ export class TensorFlowSpermAnalyzer {
     track: Array<{ x: number; y: number; timestamp: number }>;
   }>> {
     try {
-      console.log(`Starting tracking for ${detections.length} detected cells`);
+      console.log(`Starting tracking for ${detections.length} detected cells (Advanced: ${useAdvancedTracking})`);
       
+      if (useAdvancedTracking) {
+        // Use advanced DeepSORT-style tracking
+        const trackingDetections = detections.map(det => ({
+          bbox: { x: det.x, y: det.y, width: det.width, height: det.height },
+          confidence: det.confidence,
+          features: [det.width, det.height, det.confidence], // Simple features for now
+          motilityType: det.class as 'progressive' | 'non-progressive' | 'immotile'
+        }));
+        
+        const trackedCells = await advancedTracker.track(trackingDetections, Date.now());
+        
+        if (trackedCells.length > 0) {
+          console.log(`Advanced tracking completed: ${trackedCells.length} cells tracked`);
+          const stats = advancedTracker.getStats();
+          console.log('Tracking stats:', stats);
+          return trackedCells;
+        }
+        
+        console.warn('Advanced tracking failed, falling back to basic tracking');
+      }
+      
+      // Basic tracking (original implementation)
       const trackedCells = detections.map((detection, index) => {
         const track = [];
         const baseX = detection.x;
@@ -168,7 +191,7 @@ export class TensorFlowSpermAnalyzer {
         };
       });
       
-      console.log(`Successfully tracked ${trackedCells.length} cells`);
+      console.log(`Successfully tracked ${trackedCells.length} cells using basic tracking`);
       return trackedCells;
       
     } catch (error) {
