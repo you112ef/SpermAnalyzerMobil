@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "Sperm Analyzer AI",
+    "slug": "sperm-analyzer-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#3182CE"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.spermanalyzer.ai",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to camera to capture sperm samples for analysis.",
+        "NSMicrophoneUsageDescription": "This app needs access to microphone for video recording.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to photo library to save analysis results."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#3182CE"
+      },
+      "package": "com.spermanalyzer.ai",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Sperm Analyzer to access your camera for analysis."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow Sperm Analyzer to access your photos for saving results.",
+          "savePhotosPermission": "Allow Sperm Analyzer to save analysis results to your photo library."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "sperm-analyzer-ai"
+      }
+    }
+  }
+}
